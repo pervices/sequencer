@@ -44,18 +44,11 @@ int main(int argc, char *argv[])
 	//__u8 ADM1266_password;
 
 	// Path of the firmware file
-	//ADM1266_ptr_file_fw = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\adm1266_v1.14.2_b0.hex", "r");
-	ADM1266_ptr_file_fw = fopen("./config_files/adm1266_v1.14.3.hex", "r");
-
-	// Path of the configuration file for windows
-	// The configuration path order should be in the same order as the device address listed in address array above
-	//ADM1266_ptr_file_cfg[0] = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\EVAL-ADM1266 - Two Boards Config-device@40.hex", "r");
-	//ADM1266_ptr_file_cfg[1] = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\EVAL-ADM1266 - Two Boards Config-device@42.hex", "r");
+	ADM1266_ptr_file_fw = fopen("./config_files/adm1266_v1.15.4.hex", "r");
 
 	// Path of the configuration file for linux
-	ADM1266_ptr_file_cfg[0] = fopen("./config_files/EVAL-ADM1266 - Two Boards Config-device@40.hex", "r");
-	ADM1266_ptr_file_cfg[1] = fopen("./config_files/EVAL-ADM1266 - Two Boards Config-device@42.hex", "r");
-
+	ADM1266_ptr_file_cfg[0] = fopen("./config_files/tate-pwr-4E.hex", "r");
+	ADM1266_ptr_file_cfg[1] = fopen("./config_files/tate-dig-4F.hex", "r");
 
 	// Check for if refresh is running and all the devices are present
 	if ((ADM1266_Refresh_Status(ADM1266_Address, ADM1266_NUM) == 1) || (ADM1266_Device_Present(ADM1266_Address, ADM1266_NUM) == 0))
