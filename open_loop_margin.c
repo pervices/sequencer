@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 
 	// Specify the hex PMBus address for each ADM1266 in your system
-	__u8 ADM1266_Address[ADM1266_NUM] = { 0x40, 0x42 };
+	__u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F };
 
 	// Include following Variables in your code
 	float ADM1266_DAC_Output = 0;

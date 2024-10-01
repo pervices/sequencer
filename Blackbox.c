@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 	//int aardvark_id = 1845961448; // Uncomment when using Aardvark
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 	
-	__u8 ADM1266_Address[ADM1266_NUM] = {0x40, 0x42 }; // Specify the hex PMBus address for each ADM1266 in your system
+	// Specify the hex PMBus address for each ADM1266 in your system
+	__u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F }; 
 
 	// Include following Variables in your code
 	__s32 temp = 1;

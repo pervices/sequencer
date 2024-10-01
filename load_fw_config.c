@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	FILE *ADM1266_ptr_file_cfg[ADM1266_NUM];
 
 	// Address of all the ADM1266 in the system
-	__u8 ADM1266_Address[ADM1266_NUM] = { 0x40, 0x42 };
+	__u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F };
 
 	// For storing user input for update type: configuration, firmware or both
 	__u8 ADM1266_update_type;
