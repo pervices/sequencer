@@ -8,6 +8,7 @@
 //=========================================================================
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <time.h>
 #include "library/adm1266.h"
@@ -15,14 +16,75 @@
 #include <linux/types.h>
 #endif /* __MSC_VER */
 
-#define ADM1266_NUM 2 // Specify number of ADM1266 in your system
+#define ADM1266_NUM 1 // Always be one
 
 //=========================================================================
 // MAIN PROGRAM ENTRY POINT
 //=========================================================================
 int main(int argc, char *argv[])
 {
-	i2c_init(); // Uncomment for Linux System
+	int opt;
+	const char* file_path;
+	const char* device_name;
+	while ((opt = getopt(argc, argv, "i:b:")) != -1) {
+		switch (opt) {
+			case 'i': 
+				file_path = optarg;
+				break;
+			case 'b': 
+				device_name = optarg;
+				break;
+			default:
+				printf("Usage: %s [-i] [file...] [-b] [digital | power]\n", argv[0]);
+				exit(EXIT_FAILURE);
+		}
+	}
+
+	if (argc < 4) {
+		printf("Insufficient arguments\nUsage: %s [-i] [file...] [-b] [digital | power]\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
+	// Setting the sequencer address
+	__u8 ADM1266_Address[ADM1266_NUM];
+	const char *i2c_bus_path;
+
+	if (strcmp(device_name, "digital") == 0 || strcmp(device_name, "dig") == 0) {
+		// Address for digital board sequencer is 0x4F
+		ADM1266_Address[0] = 0x4F;
+		// The digital board sequencer 0x4F is on i2c-1 bus
+		i2c_bus_path = "/dev/i2c-1";
+
+		// Check if file name is correct
+		if (strstr(file_path, "digital") != NULL && strstr(file_path, "power") == 0) {
+			// file name have digital in it
+			// good
+			printf("\033[0;32m[INFO]\033[0m Updating digital board sequencer with '%s'.\n", file_path);
+		} else {
+			printf("\033[0;31m[ERROR]\033[0m Sequencer update file specified does not match board type.\n");
+			exit(EXIT_FAILURE);
+		}
+	} else if (strcmp(device_name, "power") == 0 || strcmp(device_name, "pwr") == 0) {
+		// Address for power board sequencer is 0x4E
+		ADM1266_Address[0] = 0x4E;
+		// The power board sequencer 0x4E is on i2c-2 bus
+		i2c_bus_path = "/dev/i2c-2";
+
+		// Check if file name is correct
+		if (strstr(file_path, "power") != NULL && strstr(file_path, "digital") == 0) {
+			// file name have power in it
+			// good
+			printf("\033[0;32m[INFO]\033[0m Updating power board sequencer with '%s'.\n", file_path);
+		} else {
+			printf("\033[0;31m[ERROR]\033[0m Sequencer update file specified does not match board type.\n");
+			exit(EXIT_FAILURE);
+		}
+	} else {
+		printf("\033[0;31m[ERROR]\033[0m Wrong board type entered\n");
+		exit(EXIT_FAILURE);
+	}
+
+	i2c_init(i2c_bus_path); // Uncomment for Linux System
 	//int aardvark_id = 1845961448; // Uncomment when using Aardvark
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 
@@ -32,7 +94,7 @@ int main(int argc, char *argv[])
 	FILE *ADM1266_ptr_file_cfg[ADM1266_NUM];
 
 	// Address of all the ADM1266 in the system
-	__u8 ADM1266_Address[ADM1266_NUM] = { 0x40, 0x42 };
+	// __u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F };
 
 	// For storing user input for update type: configuration, firmware or both
 	__u8 ADM1266_update_type;
@@ -44,74 +106,36 @@ int main(int argc, char *argv[])
 	//__u8 ADM1266_password;
 
 	// Path of the firmware file
-	//ADM1266_ptr_file_fw = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\adm1266_v1.14.2_b0.hex", "r");
-	ADM1266_ptr_file_fw = fopen("./config_files/adm1266_v1.14.3.hex", "r");
-
-	// Path of the configuration file for windows
-	// The configuration path order should be in the same order as the device address listed in address array above
-	//ADM1266_ptr_file_cfg[0] = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\EVAL-ADM1266 - Two Boards Config-device@40.hex", "r");
-	//ADM1266_ptr_file_cfg[1] = fopen("C:\\Users\\hopal\\ADM126x_SW\\trunk\\Applications\\C Library\\Firmware Configuration Files\\EVAL-ADM1266 - Two Boards Config-device@42.hex", "r");
+	// ADM1266_ptr_file_fw = fopen("./config_files/adm1266_v1.15.4.hex", "r");
+	// We will not program the firmware
 
 	// Path of the configuration file for linux
-	ADM1266_ptr_file_cfg[0] = fopen("./config_files/EVAL-ADM1266 - Two Boards Config-device@40.hex", "r");
-	ADM1266_ptr_file_cfg[1] = fopen("./config_files/EVAL-ADM1266 - Two Boards Config-device@42.hex", "r");
+	// ADM1266_ptr_file_cfg[0] = fopen("./config_files/tate-pwr-4E.hex", "r");
+	// ADM1266_ptr_file_cfg[1] = fopen("./config_files/tate-dig-4F.hex", "r");
+	ADM1266_ptr_file_cfg[0] = fopen(file_path, "r");
 
+	char foo[100];
+	printf("\033[0;32m[INFO]\033[0m Press Enter to start programming");
+	fgets(foo, 100, stdin);
 
 	// Check for if refresh is running and all the devices are present
 	if ((ADM1266_Refresh_Status(ADM1266_Address, ADM1266_NUM) == 1) || (ADM1266_Device_Present(ADM1266_Address, ADM1266_NUM) == 0))
 	{
 		if ((ADM1266_Refresh_Status(ADM1266_Address, ADM1266_NUM) == 1))
 		{
-			printf("Memory refresh is currently running, please try after 10 secounds.");
+			printf("\033[0;31m[ERROR]\033[0m Memory refresh is currently running, please try after 10 secounds.\n");
 		}
 		else
 		{
-			printf("Not all the devices defined are present.");
+			printf("\033[0;31m[ERROR]\033[0m Not all the devices defined are present.\n");
 		}
 	}
 	else
 	{
-		printf("Enter '1' to update both firmware and configuration, '2' to update firmware only, '3' to update configuration only: ");
-		scanf("%hhd", &ADM1266_update_type);
-		// Update firmware and then configuration
-		if (ADM1266_update_type == 1)
-		{
-			// Call the function to program firmware
-			// This function requires the ADM1266 address array, number of ADM1266 and pointer to firmware file
-			ADM1266_Program_Firmware(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_fw);
-			// Call the function to program configuration
-			// This function requires the ADM1266 address array, number of ADM1266 and pointer to config files
-			ADM1266_Program_Config(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_cfg, 0);
-			// Check CRC to confirm firmware and config were updated correctly
-			// This function requires ADM1266 address array, number of ADM1266
-			ADM1266_CRC_Summary(ADM1266_Address, ADM1266_NUM);
-		}
-		// Update firmware only
-		else if (ADM1266_update_type == 2)
-		{
-			ADM1266_Program_Firmware(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_fw);
-			ADM1266_CRC_Summary(ADM1266_Address, ADM1266_NUM);
-		}
-		// Update configuration only
-		else if (ADM1266_update_type == 3)
-		{
-			// When seamless reset is performed the sequence jumps directly to power good state
-			printf("Enter '1' to do seamless reset or any other input for a sequence reset after update : ");
-			scanf("%hhd", &ADM1266_reset_type);
-			if (ADM1266_reset_type == 1)
-			{
-				ADM1266_Program_Config(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_cfg, 1);
-			}
-			else
-			{
-				ADM1266_Program_Config(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_cfg, 0);
-			}
-			ADM1266_CRC_Summary(ADM1266_Address, ADM1266_NUM);
-		}
-		else
-		{
-			printf("Not a valid input selected.");
-		}
+		// always update configuration only
+		ADM1266_Program_Config(ADM1266_Address, ADM1266_NUM, ADM1266_ptr_file_cfg, 1);
+		// check CRC
+		ADM1266_CRC_Summary(ADM1266_Address, ADM1266_NUM);
 	}
 
 	return 0;

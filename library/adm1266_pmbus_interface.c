@@ -14,16 +14,15 @@
 
 int file;
 
-void i2c_init()
+void i2c_init(const char* bus_path)
 {
-
-    const char *path = "/dev/i2c-1";
     int rc;
-    file = open(path, O_RDWR);
+    
+    file = open(bus_path, O_RDWR);
 	if (file < 0)
     {
-		err(errno, "Tried to open '%s'", path);
-    }   
+		err(errno, "Tried to open '%s'", bus_path);
+    }
 }
 
 __u32 i2c_block_write(__u8 device_addr,__u8 dataout_length, __u8 *dataout)
@@ -58,8 +57,8 @@ __u32 i2c_block_write(__u8 device_addr,__u8 dataout_length, __u8 *dataout)
     // datawrite is the data which will be written to the i2c slave device
 
     bytes_written = i2c_smbus_block_write_big(file, device_addr, command, length, datawrite);
- 
-   return bytes_written;
+
+    return bytes_written;
 }
 
 
@@ -96,12 +95,12 @@ __u32 i2c_block_write_block_read(__u8 device_addr, __u8 dataout_length, __u8 *da
     // read_no_bytes is the number of bytes of data which will be read back from the i2c slave device
     // datain is the data which is read back from the i2c slave device
 
-	    
-	bytes_read = i2c_smbus_block_write_block_read(file, device_addr, command, length, datawrite, read_no_bytes, datain);
-
+    bytes_read = i2c_smbus_block_write_block_read(file, device_addr, command, length, datawrite, read_no_bytes, datain);
+    
     return bytes_read;
 }
 
+// This function was never used
 void set_i2c_addr(__u8 addr)
 {
     int rc;

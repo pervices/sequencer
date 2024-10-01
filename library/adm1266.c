@@ -3,6 +3,7 @@
 // This software is proprietary to Analog Devices, Inc. and its licensors.
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <math.h>
 #include <string.h>
@@ -88,7 +89,6 @@ void ADM1266_Print_CRC(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 2, ADM1266_datain);
 		for (__u8 j = 4; j < 8; j++)
 		{
 			temp = pow(2, j);
@@ -158,7 +158,6 @@ void ADM1266_Get_Main_Backup(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 2, ADM1266_datain);
 		ADM1266_Main_Backup[i] = (ADM1266_datain[0] & 1);
 	}
 }
@@ -1590,7 +1589,7 @@ void ADM1266_FW_Boot_Rev(__u8 ADM1266_Address, __u8 *ADM1266_datain)
 {   
     __u8 dataout[1];
     dataout[0] = 0xAE;
-    i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 9, ADM1266_datain);  
+    i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 9, ADM1266_datain);
 }
 
 void ADM1266_Pause_Sequence(__u8 ADM1266_Address, __u8 ADM1266_Reset_Sequence)
@@ -2340,7 +2339,7 @@ __u8 ADM1266_Get_Part_Locked_System(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);		
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		temp = temp | ((ADM1266_datain[0] & 4) >> 2);
 	}
 	return temp;
