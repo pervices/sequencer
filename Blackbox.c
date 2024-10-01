@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 						printf("\n\n\n\n\n");
 					}
 				}
-				else
+				else if (ADM1266_Num_Records > 0)
 				{
 					ADM1266_Get_BB_Raw_Data(ADM1266_NUM, ADM1266_Address, temp, ADM1266_Record_Index, ADM1266_Num_Records, (__u8 *)ADM1266_BB_Data);
 					ADM1266_Configuration_Name(ADM1266_System_Data);
