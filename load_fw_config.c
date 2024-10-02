@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		i2c_bus_path = "/dev/i2c-1";
 
 		// Check if file name is correct
-		if (strstr(file_path, "digital") != NULL) {
+		if (strstr(file_path, "digital") != NULL && strstr(file_path, "power") == 0) {
 			// file name have digital in it
 			// good
 			printf("\033[0;32m[INFO]\033[0m Updating digital board sequencer with '%s'.\n", file_path);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		i2c_bus_path = "/dev/i2c-2";
 
 		// Check if file name is correct
-		if (strstr(file_path, "power") != NULL) {
+		if (strstr(file_path, "power") != NULL && strstr(file_path, "digital") == 0) {
 			// file name have power in it
 			// good
 			printf("\033[0;32m[INFO]\033[0m Updating power board sequencer with '%s'.\n", file_path);
