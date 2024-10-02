@@ -156,11 +156,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-
-	char foo[100];
-	printf("\nPress Enter to exit the program");
-	fgets(foo, 100, stdin);
-
 	return 0;
 }
 
