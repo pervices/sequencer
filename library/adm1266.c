@@ -95,10 +95,6 @@ void ADM1266_Print_CRC(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 2, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_CRC\n");
-			// exit(EXIT_FAILURE); // this is expected to fail, do not exit
-		}
 		for (__u8 j = 4; j < 8; j++)
 		{
 			temp = pow(2, j);
@@ -168,10 +164,6 @@ void ADM1266_Get_Main_Backup(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 2, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Main_Backup, check hardware connection. Program stopped.\n");
-			exit(EXIT_FAILURE);
-		}
 		ADM1266_Main_Backup[i] = (ADM1266_datain[0] & 1);
 	}
 }
