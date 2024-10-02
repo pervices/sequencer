@@ -343,7 +343,10 @@ void ADM1266_Print_User_Data(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("User_Data for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		// Do not check if datain is empty here, becase user data is empty by default
+		if (i2c_block_write_block_read(ADM1266_Address[i], 5, dataout,253, ADM1266_datain) == 0){
+			printf("\033[0;31m[ERROR]\033[0m I2C read failed, check hardware connection. Program stopped.\n");
+			exit(EXIT_FAILURE);
+		}
 		temp = ADM1266_datain[1] + (ADM1266_datain[2] * 256);
 		for (__u8 j = 3; j < temp; j++)
 		{
