@@ -47,10 +47,14 @@ int main(int argc, char *argv[])
 
 	// Setting the sequencer address
 	__u8 ADM1266_Address[ADM1266_NUM];
+	const char *i2c_bus_path;
 
-	if (strcmp(device_name, "digital") == 0) {
+	if (strcmp(device_name, "digital") == 0 || strcmp(device_name, "dig") == 0) {
 		// Address for digital board sequencer is 0x4F
 		ADM1266_Address[0] = 0x4F;
+		// The digital board sequencer 0x4F is on i2c-1 bus
+		i2c_bus_path = "/dev/i2c-1";
+
 		// Check if file name is correct
 		if (strstr(file_path, "digital") != NULL) {
 			// file name have digital in it
@@ -60,9 +64,12 @@ int main(int argc, char *argv[])
 			printf("\033[0;31m[ERROR]\033[0m Sequencer update file specified does not match board type.\n");
 			exit(EXIT_FAILURE);
 		}
-	} else if (strcmp(device_name, "power") == 0) {
+	} else if (strcmp(device_name, "power") == 0 || strcmp(device_name, "pwr") == 0) {
 		// Address for power board sequencer is 0x4E
 		ADM1266_Address[0] = 0x4E;
+		// The power board sequencer 0x4E is on i2c-2 bus
+		i2c_bus_path = "/dev/i2c-2";
+
 		// Check if file name is correct
 		if (strstr(file_path, "power") != NULL) {
 			// file name have power in it
@@ -77,7 +84,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	i2c_init(); // Uncomment for Linux System
+	i2c_init(i2c_bus_path); // Uncomment for Linux System
 	//int aardvark_id = 1845961448; // Uncomment when using Aardvark
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 

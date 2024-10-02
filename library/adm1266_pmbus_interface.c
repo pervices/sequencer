@@ -12,29 +12,16 @@
 #include "adm1266_pmbus_interface.h"
 #include "adi_pmbus.h"
 
-int file[2];
+int file;
 
-void i2c_init()
+void i2c_init(const char* bus_path)
 {
-    // The digital board sequencer 0x4F is on i2c-1 bus
-    // The power board sequencer 0x4E is on i2c-2 bus
-    const char *path_dig_seq_bus = "/dev/i2c-1";
-    const char *path_pwr_seq_bus = "/dev/i2c-2";
     int rc;
     
-    // Below is a temporary fix to allow communicating with devices on 2 
-    // different buses in the same program
-
-    file[0] = open(path_dig_seq_bus, O_RDWR);
-	if (file[0] < 0)
+    file = open(bus_path, O_RDWR);
+	if (file < 0)
     {
-		err(errno, "Tried to open '%s'", path_dig_seq_bus);
-    }
-
-    file[1] = open(path_pwr_seq_bus, O_RDWR);
-	if (file[1] < 0)
-    {
-		err(errno, "Tried to open '%s'", path_pwr_seq_bus);
+		err(errno, "Tried to open '%s'", bus_path);
     }
 }
 
@@ -69,16 +56,9 @@ __u32 i2c_block_write(__u8 device_addr,__u8 dataout_length, __u8 *dataout)
     // length is the number of bytes of data which will be sent to the i2c slave device
     // datawrite is the data which will be written to the i2c slave device
 
-    if (device_addr == 0x4F){           // 0x4F is on i2c-1 bus
-        bytes_written = i2c_smbus_block_write_big(file[0], device_addr, command, length, datawrite);
-    } else if (device_addr == 0x4E) {   // 0x4E is on i2c-2 bus
-        bytes_written = i2c_smbus_block_write_big(file[1], device_addr, command, length, datawrite);
-    } else {
-        return bytes_written; // No bytes written
-    }
-    
- 
-   return bytes_written;
+    bytes_written = i2c_smbus_block_write_big(file, device_addr, command, length, datawrite);
+
+    return bytes_written;
 }
 
 
@@ -115,14 +95,8 @@ __u32 i2c_block_write_block_read(__u8 device_addr, __u8 dataout_length, __u8 *da
     // read_no_bytes is the number of bytes of data which will be read back from the i2c slave device
     // datain is the data which is read back from the i2c slave device
 
-	if (device_addr == 0x4F){           // 0x4F is on i2c-1 bus
-        bytes_read = i2c_smbus_block_write_block_read(file[0], device_addr, command, length, datawrite, read_no_bytes, datain);
-    } else if (device_addr == 0x4E) {   // 0x4E is on i2c-2 bus
-        bytes_read = i2c_smbus_block_write_block_read(file[1], device_addr, command, length, datawrite, read_no_bytes, datain);
-    } else {
-        return bytes_read; // No bytes read
-    }
-
+    bytes_read = i2c_smbus_block_write_block_read(file, device_addr, command, length, datawrite, read_no_bytes, datain);
+    
     return bytes_read;
 }
 
@@ -130,7 +104,7 @@ __u32 i2c_block_write_block_read(__u8 device_addr, __u8 dataout_length, __u8 *da
 void set_i2c_addr(__u8 addr)
 {
     int rc;
-    rc = ioctl(file[0], I2C_SLAVE, addr);
+    rc = ioctl(file, I2C_SLAVE, addr);
     if (rc < 0)
     {
 		err(errno, "Tried to set device address '0x%02x'", addr);       

@@ -37,21 +37,28 @@ int main(int argc, char *argv[])
 
 	// Setting the sequencer address
 	__u8 ADM1266_Address[ADM1266_NUM];
+	const char *i2c_bus_path;
 
 	if (strcmp(device_name, "digital") == 0 || strcmp(device_name, "dig") == 0) {
 		// Address for digital board sequencer is 0x4F
 		ADM1266_Address[0] = 0x4F;
+		// The digital board sequencer 0x4F is on i2c-1 bus
+		i2c_bus_path = "/dev/i2c-1";
+
 		printf("Trying to read from digital board sequencer.\n");
 	} else if (strcmp(device_name, "power") == 0 || strcmp(device_name, "pwr") == 0) {
 		// Address for power board sequencer is 0x4E
 		ADM1266_Address[0] = 0x4E;
+		// The power board sequencer 0x4E is on i2c-2 bus
+		i2c_bus_path = "/dev/i2c-2";
+		
 		printf("Trying to read from power board sequencer.\n");
 	} else {
 		printf("\033[0;31m[ERROR]\033[0m Wrong board type entered\n");
 		exit(EXIT_FAILURE);
 	}
 
-	i2c_init(); // Uncomment for Linux System
+	i2c_init(i2c_bus_path); // Uncomment for Linux System
 	//int aardvark_id = 1845961448; // Uncomment when using Aardvark
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 
