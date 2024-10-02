@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <time.h>
 #include "library/adm1266.h"
@@ -11,17 +12,51 @@
 #include <linux/types.h>
 #endif /* __MSC_VER */
 
-#define ADM1266_NUM 2 // Specify number of ADM1266 in your system
+#define ADM1266_NUM 1 // Always be one
 
 
 int main(int argc, char *argv[])
 {
+	int opt;
+	const char* device_name;
+	while ((opt = getopt(argc, argv, "b:")) != -1) {
+		switch (opt) {
+			case 'b': 
+				device_name = optarg;
+				break;
+			default:
+				printf("Usage: %s [-b] [digital | power]\n", argv[0]);
+				exit(EXIT_FAILURE);
+		}
+	}
+
+	if (argc < 2) {
+		printf("Insufficient arguments\nUsage: %s [-b] [digital | power]\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
+	// Setting the sequencer address
+	__u8 ADM1266_Address[ADM1266_NUM];
+
+	if (strcmp(device_name, "digital") == 0 || strcmp(device_name, "dig") == 0) {
+		// Address for digital board sequencer is 0x4F
+		ADM1266_Address[0] = 0x4F;
+		printf("Trying to read from digital board sequencer.\n");
+	} else if (strcmp(device_name, "power") == 0 || strcmp(device_name, "pwr") == 0) {
+		// Address for power board sequencer is 0x4E
+		ADM1266_Address[0] = 0x4E;
+		printf("Trying to read from power board sequencer.\n");
+	} else {
+		printf("\033[0;31m[ERROR]\033[0m Wrong board type entered\n");
+		exit(EXIT_FAILURE);
+	}
+
 	i2c_init(); // Uncomment for Linux System
 	//int aardvark_id = 1845961448; // Uncomment when using Aardvark
 	//aardvark_open(aardvark_id); // Uncomment when using Aardvark
 
 	// Specify the hex PMBus address for each ADM1266 in your system
-	__u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F }; 
+	// __u8 ADM1266_Address[ADM1266_NUM] = { 0x4E, 0x4F }; 
 
 	// Include following Variables in your code
 	__s32 temp = 1;
@@ -218,9 +253,9 @@ int main(int argc, char *argv[])
 
 	}
 
-
-	printf("\nPress any number followed by Enter to exit the program ");
-	scanf("%d", &temp);
+	char foo[100];
+	printf("\nPress Enter to exit the program");
+	fgets(foo, 100, stdin);
 
 	return 0;
 }
