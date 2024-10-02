@@ -18,9 +18,7 @@ void ADM1266_Print_Current_State(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_Current_State\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		temp = ADM1266_datain[0] + (ADM1266_datain[1] * 256)-1;
 		printf("ADM1266 at Address %#02x is in '", ADM1266_Address[i]);
 		ADM1266_Get_Name(ADM1266_System_Data, ADM1266_State_Name,temp);
@@ -36,9 +34,7 @@ void ADM1266_Get_Current_State(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *AD
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Current_State\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		ADM1266_Current_State[i] = ADM1266_datain[0] + (ADM1266_datain[1]*256);
 	}
 }
@@ -174,9 +170,7 @@ __u8 ADM1266_Get_Part_Locked(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Part_Locked\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		ADM1266_Part_Locked[i] = (ADM1266_datain[0]&4)>>2 ;
 		temp = temp | ADM1266_Part_Locked[i];
 	}
@@ -191,9 +185,7 @@ __u8 ADM1266_Get_Sys_CRC(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Sys_CRC\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		if (ADM1266_datain[0] > 31)
 		{
 			temp = 1;
@@ -210,9 +202,7 @@ void ADM1266_Print_MFR_ID(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_ID for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_ID\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain);
 		for (__u8 j = 1; j < 33; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -229,9 +219,7 @@ void ADM1266_Print_MFR_MODEL(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_MODEL for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_MODEL\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain);
 		for (__u8 j = 1; j < 33; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -248,9 +236,7 @@ void ADM1266_Print_MFR_REVISION(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_REVISION for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_REVISION\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain);
 		for (__u8 j = 1; j < 9; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -267,9 +253,7 @@ void ADM1266_Print_MFR_LOCATION(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_LOCATION for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 49, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_LOCATION\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 49, ADM1266_datain);
 		for (__u8 j = 1; j < 49; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -286,9 +270,7 @@ void ADM1266_Print_MFR_DATE(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_DATE for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 17, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_DATE\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 17, ADM1266_datain);
 		for (__u8 j = 1; j < 17; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -305,9 +287,7 @@ void ADM1266_Print_MFR_SERIAL(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("MFR_SERIAL for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_MFR_SERIAL\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 33, ADM1266_datain);
 		for (__u8 j = 1; j < 33; j++)
 		{
 			printf("%c", ADM1266_datain[j]);
@@ -325,9 +305,7 @@ void ADM1266_Print_User_Data(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		printf("User_Data for ADM1266 at Address %#02x is : ", ADM1266_Address[i]);
-		if (i2c_block_write_block_read(ADM1266_Address[i], 5, dataout,253, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Print_User_Data\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 5, dataout,253, ADM1266_datain);
 		temp = ADM1266_datain[1] + (ADM1266_datain[2] * 256);
 		for (__u8 j = 3; j < temp; j++)
 		{
@@ -344,9 +322,7 @@ void ADM1266_Get_IC_Device_ID(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 4, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_IC_Device_ID\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 4, ADM1266_datain);
 		for (__u8 j = 1; j < 4; j++)
 		{
 			ADM1266_IC_Device_ID[n21(0, i, (j-1), ADM1266_NUM, 3)] = ADM1266_datain[j];
@@ -363,9 +339,7 @@ void ADM1266_Get_IC_Device_Rev(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *AD
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
 		mode = 0;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_IC_Device_Rev\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain);
 		for (__u8 j = 4; j < 7; j++)
 		{
 			ADM1266_Bootloader_Rev[n21(0, i, (j - 4), ADM1266_NUM, 3)] = ADM1266_datain[j];
@@ -400,9 +374,7 @@ void ADM1266_Get_Refresh_Counter(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u16 
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Refresh_Counter\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain);
 		ADM1266_Refresh_Counter[i] = ADM1266_datain[3] + (ADM1266_datain[4] * 256);
 	}
 }
@@ -423,9 +395,7 @@ void ADM1266_Get_CRC_Error_Counter(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u1
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain) == 0){
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_CRC_Error_Counter\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 9, ADM1266_datain);
 		ADM1266_CRC_Error_Counter[i] = ADM1266_datain[5] + (ADM1266_datain[6] * 256);
 	}
 }
@@ -559,9 +529,7 @@ void ADM1266_Get_All_Data(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1266
 	{
 		k = 1;
 		dataout[0] = 0xE8;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 52, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_All_Data 1\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 52, ADM1266_datain);
 		for (j = 1; j < 5; j++) 
 		{
 			ADM1266_VH_Data[n21(i, j, 9, 5, 15)] = p;
@@ -580,9 +548,7 @@ void ADM1266_Get_All_Data(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1266
 		}
 		k = 1;
 		dataout[0] = 0xE7;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 18, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_All_Data 2\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 18, ADM1266_datain);
 		for (j = 1; j < 5; j++)
 		{
 			ADM1266_VH_Data[n21(i, j, 10, 5, 15)] = (ADM1266_datain[k] & 128)/128; //ovf
@@ -600,14 +566,10 @@ void ADM1266_Get_All_Data(__u8 ADM1266_NUM, __u8 *ADM1266_Address, __u8 *ADM1266
 			k += 1;
 		}
 		dataout[0] = 0xE9;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 3, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_All_Data 3\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 3, ADM1266_datain);
 		temp = (ADM1266_datain[2] * 256) + ADM1266_datain[1];
 		dataout[0] = 0xEA;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 3, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_All_Data 4\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 3, ADM1266_datain);
 		temp2 = (ADM1266_datain[2] * 256) + ADM1266_datain[1];
 		temp2 = ADM1266_GPIO_Map(temp2);
 		for (k = 0; k < 16; k++)
@@ -859,9 +821,7 @@ void ADM1266_System_Read(__u8 ADM1266_Num, __u8 *ADM1266_Address, __u8 *ADM1266_
 
 	sdPtr = 0;
 	__u8 dataout[5] = { 0xD7, 0x03, 0x80, 0x00, 0x00 };
-	if (i2c_block_write_block_read(ADM1266_Address[0], 5, dataout, 128, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_System_Read 1\n");
-	}
+	i2c_block_write_block_read(ADM1266_Address[0], 5, dataout, 128, ADM1266_datain);
 
 	for (m = 0; m < ADM1266_datain[29] + 1; m++) {
 		ADM1266_System_Data[m + sdPtr] = ADM1266_datain[m + 29];
@@ -877,9 +837,7 @@ void ADM1266_System_Read(__u8 ADM1266_Num, __u8 *ADM1266_Address, __u8 *ADM1266_
 		k = 0;
 		n = 0;
 		__u8 dataout[5] = { 0xD7, 0x03, 0x03, 0x00, 0x00 };
-		if (i2c_block_write_block_read(ADM1266_Address[i], 5, dataout, 3, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_System_Read 2\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 5, dataout, 3, ADM1266_datain);
 		Data_Length = ADM1266_datain[1] + (ADM1266_datain[2] * 256);
 		j = 128;
 		while (j < Data_Length)
@@ -898,9 +856,7 @@ void ADM1266_System_Read(__u8 ADM1266_Num, __u8 *ADM1266_Address, __u8 *ADM1266_
 			dataout[4] = k;
 
 
-			if (i2c_block_write_block_read(ADM1266_Address[i], 5, dataout, n + 1, ADM1266_datain) == 0) {
-				printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_System_Read 3\n");
-			}
+			i2c_block_write_block_read(ADM1266_Address[i], 5, dataout, n + 1, ADM1266_datain);
 			if (k == 0 && l == 128 && n == 128)
 			{
 				ADM1266_System_Data[sdPtr] = ADM1266_datain[128];
@@ -1202,9 +1158,7 @@ void ADM1266_Get_Num_Records(__u8 *ADM1266_Address, __u16 *ADM1266_Record_Index,
 {
 	__u8 ADM1266_datain[5];
 	__u8 dataout[1] = { 0xE6 };
-	if (i2c_block_write_block_read(ADM1266_Address[0], 1, dataout, 5, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Num_Records\n");
-	}
+	i2c_block_write_block_read(ADM1266_Address[0], 1, dataout, 5, ADM1266_datain);
 	*ADM1266_Record_Index = ADM1266_datain[3];
 	*ADM1266_Num_Records = ADM1266_datain[4];
 }
@@ -1224,9 +1178,7 @@ void ADM1266_Get_BB_Raw_Data(__u8 ADM1266_Num, __u8 *ADM1266_Address, __u8 index
 	for (__u8 i = 0; i < ADM1266_Num; i++)
 	{
 		dataout[2] = temp;
-		if (i2c_block_write_block_read(ADM1266_Address[i], 3, dataout, 64, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_BB_Raw_Data\n");
-		}
+		i2c_block_write_block_read(ADM1266_Address[i], 3, dataout, 64, ADM1266_datain);
 		for (m = 0; m < 64; m++) {
 			ADM1266_BB_Data[n21(0, i, m, ADM1266_Num, 64)] = ADM1266_datain[m];
 			//printf("%d - %d , ",m-1, ADM1266_BB_Data[n21(0, i, m, ADM1266_Num, 64)]);
@@ -1637,9 +1589,7 @@ void ADM1266_FW_Boot_Rev(__u8 ADM1266_Address, __u8 *ADM1266_datain)
 {   
     __u8 dataout[1];
     dataout[0] = 0xAE;
-    if (i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 9, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_FW_Boot_Rev\n");
-	}  
+    i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 9, ADM1266_datain);
 }
 
 void ADM1266_Pause_Sequence(__u8 ADM1266_Address, __u8 ADM1266_Reset_Sequence)
@@ -1734,14 +1684,10 @@ void ADM1266_Margin_Single_Percent(__u8 ADM1266_Address, __u8 ADM1266_Pin, float
 
 	//Read back exp and ment
 	dataout[0] = 0x20;
-	if (i2c_block_write_block_read(ADM1266_Address, 1, dataout, 1, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Margin_Single_Percent 1\n");
-	}
+	i2c_block_write_block_read(ADM1266_Address, 1, dataout, 1, ADM1266_datain);
 	__u8 exp = ADM1266_datain[0];
 	dataout[0] = 0x21;
-	if (i2c_block_write_block_read(ADM1266_Address, 1, dataout, 2, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed ADM1266_Margin_Single_Percent 2\n");
-	}
+	i2c_block_write_block_read(ADM1266_Address, 1, dataout, 2, ADM1266_datain);
 
 	//Calculate nominal Value
 	__u16 ment = ADM1266_datain[0] + (ADM1266_datain[1]<<8);
@@ -1907,9 +1853,7 @@ void ADM1266_Margin_Single(__u8 ADM1266_Address, char *ADM1266_Pin_Name, __u8 AD
         for (__u8 dac_index = 0; dac_index < 9; dac_index++)
         {
             dataout[2] = dac_index;
-            if (i2c_block_write_block_read(ADM1266_Address, 3, dataout, 3, ADM1266_datain) == 0) {
-				printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Margin_Single\n");
-			}
+            i2c_block_write_block_read(ADM1266_Address, 3, dataout, 3, ADM1266_datain);
 
             ADM1266_DAC_Mapping = ADM1266_datain[1] + (ADM1266_datain[2] << 8);
             ADM1266_DAC_Mapping = (ADM1266_DAC_Mapping >> 6) & 0x1F;
@@ -1973,9 +1917,7 @@ void ADM1266_DAC_Mapping(__u8 *ADM1266_Address, __u8 ADM1266_NUM, struct ADM1266
         for (__u8 dac_counter = 0; dac_counter < 9; dac_counter++)
         {
             dataout[2] = dac_counter;
-            if (i2c_block_write_block_read(ADM1266_Address[device_counter], 3, dataout, 3, ADM1266_datain) == 0) {
-				printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_DAC_Mapping\n");
-			}
+            i2c_block_write_block_read(ADM1266_Address[device_counter], 3, dataout, 3, ADM1266_datain);
             ADM1266_DAC_Mapping = ADM1266_datain[1] + (ADM1266_datain[2] << 8);         
             ADM1266_DAC_data[(dac_counter+counter_multi)].input_channel = (ADM1266_DAC_Mapping >> 6) & 0x1F;
             ADM1266_DAC_data[(dac_counter+counter_multi)].ADM1266_Address = ADM1266_Address[device_counter];            
@@ -2025,9 +1967,7 @@ __u8 ADM1266_Refresh_Status(__u8 *ADM1266_Address, __u8 ADM1266_NUM)
  
     for (__u8 loop = 0; loop < ADM1266_NUM; loop++)
     {
-        if (i2c_block_write_block_read(ADM1266_Address[loop], 0x01, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Refresh_Status\n");
-		}
+        i2c_block_write_block_read(ADM1266_Address[loop], 0x01, dataout, 1, ADM1266_datain);
         ADM1266_datain[0] = (ADM1266_datain[0] & 0x08) >> 3;
 
         if (ADM1266_datain[0] == 1)
@@ -2106,9 +2046,7 @@ __u8 ADM1266_DAC_Config(__u8 ADM1266_Address, __u8 ADM1266_DAC_Number)
         data_buffer[1] = 0x01;
         data_buffer[2] = ADM1266_DAC_Number;
  
-        if (i2c_block_write_block_read(ADM1266_Address, 0x03, data_buffer, 0x03, data_buffer) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_DAC_Config\n");
-		}
+        i2c_block_write_block_read(ADM1266_Address, 0x03, data_buffer, 0x03, data_buffer);
         margin_mode = data_buffer[1] & 0x03;
  
         if (margin_mode != 1)
@@ -2367,9 +2305,7 @@ __u16 ADM1266_All_CRC_Status(__u8 ADM1266_Address)
     __u8 dataout[1];
     dataout[0] = 0xED;
     __u8 ADM1266_datain[2];
-    if (i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 0x02, ADM1266_datain) == 0) {
-		printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_All_CRC_Status\n");
-	}
+    i2c_block_write_block_read(ADM1266_Address, 0x01, dataout, 0x02, ADM1266_datain);
     return ((ADM1266_datain[0] + (ADM1266_datain[1] << 8)) >> 4);
 }
 
@@ -2382,9 +2318,7 @@ __u8 ADM1266_Device_Present(__u8 *ADM1266_Address, __u8 ADM1266_NUM)
  
     for (__u8 loop = 0; loop < ADM1266_NUM; loop++)
     {        
-        if (i2c_block_write_block_read(ADM1266_Address[loop], 0x01, dataout, 0x04, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Device_Present\n");
-		}
+        i2c_block_write_block_read(ADM1266_Address[loop], 0x01, dataout, 0x04, ADM1266_datain);
         if (((ADM1266_datain[1] == 0x42) || (ADM1266_datain[1] == 0x41)) && (ADM1266_datain[2] == 0x12) && (ADM1266_datain[2] = 0x66))
         {
             return 1;
@@ -2405,9 +2339,7 @@ __u8 ADM1266_Get_Part_Locked_System(__u8 ADM1266_NUM, __u8 *ADM1266_Address)
 
 	for (__u8 i = 0; i < ADM1266_NUM; i++)
 	{
-		if (i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain) == 0) {
-			printf("\033[0;31m[ERROR]\033[0m \033[0;31m[ERROR]\033[0m I2C read failed at ADM1266_Get_Part_Locked_System\n");
-		}		
+		i2c_block_write_block_read(ADM1266_Address[i], 1, dataout, 1, ADM1266_datain);
 		temp = temp | ((ADM1266_datain[0] & 4) >> 2);
 	}
 	return temp;
